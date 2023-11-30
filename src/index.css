@@ -1,0 +1,10 @@
+@font-face {
+  font-family: "WarioWare Original";
+  src: url(/WarioWareIncPixel.ttf);
+  font-weight: bold;
+  font-size: 60px;
+}
+
+#game {
+  font-family: "WarioWare Original";
+}
