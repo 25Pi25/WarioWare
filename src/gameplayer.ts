@@ -5,19 +5,21 @@ import { CENTER } from './main';
 import { delay, delayF } from './util';
 
 export default class extends Scene {
-  create() {
+  async create() {
+    await delay(1000);
     const text = this.createText();
     this.animateText(text)
-    const bombscene = this.scene.add("Bomb", TimeBomb, true)
-    const mainscene = this.scene.add("main", main, true)
-    setTimeout(() => {
-      bombscene!.scene.resume()
-      mainscene!.scene.resume()
-    }, 2000);
+    const speed = 1.5
+    const bomb = this.scene.add("Bomb", new TimeBomb(speed, "long"), true)!
+    const game = this.scene.add("main", new main(speed, 3), true)!
+    // There needs to be at least some delay to allow functions to load, or else the play won't start
+    await delay(100);
+    bomb.scene.resume();
+    game.scene.resume();
   }
 
   createText(): Phaser.GameObjects.Text {
-    const text = this.add.text(...CENTER(), "KYS!", {
+    const text = this.add.text(...CENTER(), "hi!", {
       fontFamily: "WarioWare Original",
       fontSize: 100,
     }).setOrigin(0.5).setAlpha(0);
@@ -25,12 +27,10 @@ export default class extends Scene {
     gradient.addColorStop(0, '#ffffff');
     gradient.addColorStop(0.6, '#ffffff');
     gradient.addColorStop(1, '#111111');
-    text.setFill(gradient);
-    return text;
+    return text.setFill(gradient);
   }
 
   async animateText(text: Phaser.GameObjects.Text) {
-    await delay(1000);
     text.setAlpha(1);
     for (let delta = 0; delta < 0.2; delta += this.game.loop.delta / 1000) {
       // 25(x-0.2)^2+1

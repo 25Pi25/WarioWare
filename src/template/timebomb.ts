@@ -13,6 +13,7 @@ export default class TimeBomb extends Scene {
   skipGame = () => this.eject(false);
   beatsLeft: number;
   constructor(
+    private speed: number,
     private length: MicrogameLength = "short",
     private startWinState = false
   ) {
@@ -58,7 +59,7 @@ export default class TimeBomb extends Scene {
   }
 
   update(_: number, delta: number) {
-    this.beatsLeft -= 120 * delta / 60_000;
+    this.beatsLeft -= 120 * delta * this.speed / 60_000;
     this.setBombFrame(Math.floor(9 - this.beatsLeft));
     if (this.beatsLeft <= 0.5) this.eject(true);
   }
